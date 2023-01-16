@@ -1,0 +1,382 @@
+{% macro render_advertisment_card(advertisment_id, nameCompany, nameModelCar, bodytype, drivetrain, transmission, description, mileageCar, releaseYearCar, carPrice, horsepowers, city, base64img, idUser, nameUser, surnameUser, phoneUser) %}
+<div class="modal fade" id="details-{{advertisment_id}}" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Подробности автомобиля</h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <p><b>Марка: </b>{{nameCompany}}</p>
+                    <p><b>Модель: </b>{{nameModelCar}}</p>
+                    <p><b>Город: </b>{{city}}</p>
+                    <p><b>Цена: </b>{{carPrice}} рублей</p>
+                    <p><b>Год выпуска: </b>{{releaseYearCar}}</p>
+                    <p><b>Мощность двигателя: </b>{{horsepowers}} лс</p>
+                    <p><b>Пробег: </b>{{mileageCar}} км</p>
+                    <p><b>Кузов: </b>{{bodytype}}</p>
+                    <p><b>Привод: </b>{{drivetrain}}</p>
+                    <p><b>Коробка передач: </b>{{transmission}}</p>
+                    <p><b>Описание: </b>{% if description != None %} {{description}} {% else %} Отсутствует {% endif %}</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="contacts-{{advertisment_id}}" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Связь с продавцом</h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <p><b>Имя: </b>{{nameUser}}</p>
+                    <p><b>Фамилия: </b>{{surnameUser}}</p>
+                    <p><b>Номер телефона: </b>{{phoneUser}}</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="vehicle-card">
+    <div class="details">
+    <div class="thumb-gallery">
+        {% if base64img == None or base64img == Null or base64img == '' %}
+        <img class="first" src="/static/images/notfound.png" />
+        {% else %}
+        <img class="first" src="data:image/png;base64,{{ base64img }}" />
+    {% endif %}
+    </div>
+        <div class="info">
+            <h3>{{ nameCompany }} {{ nameModelCar }} {{ releaseYearCar }}</h3>
+            <h4>{{ city }}</h4>
+            <div class="price">
+                <span>Цена</span>
+                <h4>{{ carPrice }} <span>рублей</h4>
+            </div>
+            <div class="ctas">
+                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#contacts-{{advertisment_id}}">Контакт</button>
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#details-{{advertisment_id}}">Подробности</button>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="desc">
+                <p></p>
+            </div>
+            <div class="specs">
+                <div class="spec mpg">
+                    <span>Пробег</span>
+                    <p>{{ mileageCar }}<span>км</p>
+                </div>
+                <div class="spec mpg">
+                    <span>Двигатель</span>
+                    <p>{{ horsepowers }}<span>лс</p>
+                </div>
+                <div class="spec mpg">
+                    <span>Привод</span>
+                    <p>{{ drivetrain }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_car_card(companies, models, transmissions, drivetrains, bodytypes, idCar, idCompany, idModel, nameCompany, nameModelCar, releaseYearCar, mileage, horsepowers, idBodyTypeCar, bodyTypeCar, idDrivetrain, drivetrain, idTransmission, transmission, base64img, len) %}
+<div class="modal fade" id="editcar-{{ idCar }}" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form method="post" action="/editcar" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title">Изменить автомобиль</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-2">
+                        <label for="company-{{ idCar }}">Марка</label>
+                        <select id="company-{{ idCar }}" class="form-select" name="company_to_edit" onchange="update_models(this, 'model_to_edit', `{{ idModel }}`);" required>
+                            {% set n = len(companies) %}
+                            {% for i in range(1, n + 1) %}
+                                <option value={{ i - 1 }} {% if i == idCompany %} selected {% endif %}>{{ companies.iloc[i - 1].nameCompany }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="model_to_edit">Модель</label>
+                        <select id="model_to_edit" class="form-select" name="model_to_edit" required>
+                            {% set n = len(models) %}
+                            {% for i in range(1, n + 1) %}
+                                <option value={{ i - 1 }} {% if i - 1 == idModel %} selected {% endif %}>{{ models.iloc[i - 1].nameModelCar }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="transmission">Коробка передач</label>
+                        <select id="transmission" class="form-select" name="transmission_to_edit" required>
+                            {% set n = len(transmissions) %}
+                            {% for i in range(1, n + 1) %}
+                                <option value={{ i }} {% if i == idTransmission %} selected {% endif %}>{{ transmissions.iloc[i - 1].nameTransmission }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="drivetrain">Привод</label>
+                        <select id="drivetrain" class="form-select" name="drivetrain_to_edit" required>
+                            {% set n = len(drivetrains) %}
+                            {% for i in range(1, n + 1) %}
+                                <option value={{ i }} {% if i == idDrivetrain %} selected {% endif %}>{{ drivetrains.iloc[i - 1].nameDrivetrain }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="bodytypecar">Кузов</label>
+                        <select id="bodytypecar" class="form-select" name="bodytypecar_to_edit" required>
+                            {% set n = len(bodytypes) %}
+                            {% for i in range(1, n + 1) %}
+                                <option value={{ i }} {% if i == idBodyTypeCar %} selected {% endif %}>{{ bodytypes.iloc[i - 1].nameBodyTypeCar }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="releaseYear">Год выпуска</label>
+                        <input id="releaseYear" type="number" length="4" step="any" class="form-control" name="releaseYear_to_edit" required value={{ releaseYearCar }}>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="horsepowers">Мощность двигателя</label>
+                        <input id="horsepowers" type="number" step="any" class="form-control" placeholder="Введите количество лошадинных сил" name="horsepowers_to_edit" required value={{ horsepowers }}>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="mileage">Пробег</label>
+                        <input id="mileage" type="number" step="any" class="form-control" placeholder="Введите пробег(км)" name="mileage_to_edit" required value={{ mileage }}>
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="file" class="form-label">Изображение</label>
+                        <input class="form-control" type="file" id="file" name="file" accept="image/*" value="file" required>
+                    </div>
+
+                    <input class="form-control" type="hidden" name="idCar" value={{ idCar }}>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" onClick="if(form.checkValidity()){form.requestSubmit(); disabled=true;}else{form.checkValidity();}">
+                        Применить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="vehicle-card">
+    <div class="details">
+    <div class="thumb-gallery">
+        {% if base64img == None or base64img == Null or base64img == '' %}
+        <img class="first" src="/static/images/notfound.png" />
+        {% else %}
+        <img class="first" src="data:image/png;base64,{{ base64img }}" />      
+        {% endif %}
+    </div>
+        <div class="info">
+            <h3>{{ nameCompany }} {{ nameModelCar }} {{ releaseYearCar }}</h3>
+            <div class="price">
+                <span>Пробег</span>
+                <h4>{{ mileage }} <span>км</h4>
+
+                <span>Двигатель</span>
+                <h4>{{ horsepowers }} <span>лс</h4>
+
+                <span>Кузов</span>
+                <h4>{{ bodyTypeCar }}</h4>
+
+                <span>Привод</span>
+                <h4>{{ drivetrain }}</h4>
+
+                <span>Коробка передач</span>
+                <h4>{{ transmission }}</h4>
+            </div>
+            <div class="ctas">
+                <ul class="horizontal">
+                    <li>
+                        <form action="/removecar" method="post">
+                            <button class="btn btn-outline-danger">Удалить</button>
+                            <input class="form-control" type="hidden" name="idCar" value={{ idCar }}>
+                        </form>
+                    </li>
+                    <li>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editcar-{{ idCar }}" onclick="update_models(document.getElementById('company-{{ idCar }}'), 'model_to_edit', `{{ idModel }}`);">Изменить</button>
+                    </li>
+                </ul>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="desc">
+                <p></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_my_ad_card(idCar, nameCompany, nameModelCar, releaseYearCar, mileage, horsepowers, bodyTypeCar, drivetrain, transmission, advertisment_id, startDateTime, endDateTime, city, idCity, price, description, base64img, cities, len) %}
+<div class="modal fade" id="editad-{{ idCar }}" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form method="get" action="/editad">
+                <div class="modal-header">
+                    <h5 class="modal-title">Редактирование объявления</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-2">
+                        <label for="car">Автомобиль</label>
+                        <select class="form-select" id="car" name="car_to_edit" required disabled="disabled">
+                            <option>{{ nameCompany }} {{ nameModelCar }} {{ releaseYearCar }}</option>
+                        </select>
+                        <input type="hidden" name="car_to_edit" value={{ idCar }}>
+                    </div>
+    
+                    <div class="form-group mb-2">
+                        <label for="city">Город</label>
+                        <select id="city" class="form-select" name="city_to_edit" required>
+                            {% set n = len(cities) %}
+                            {% for i in range(1, n + 1) %}
+                                <option value={{ i }} {% if (i == idCity) %} selected {% endif %}>{{ cities.iloc[i - 1].nameCity }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+    
+                    <div class="form-group mb-2">
+                        <label for="price">Цена</label>
+                        <input id="price" value={{ price }} type="number" step="any" class="form-control" placeholder="Введите цену продажи автомобиля в рублях" name="price_to_edit" required>
+                    </div>
+    
+                    <div class="form-group mb-2">
+                        <label for="description">Описание</label>
+                        <textarea class="form-control" id="description" rows="3" maxlength="500" name="desc_to_edit">{% if description != None %}{{ description }}{% endif %}</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" onClick="if(form.checkValidity()){form.requestSubmit(); disabled=true;}else{form.checkValidity();}">
+                        Изменить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="vehicle-card">
+    <div class="details">
+        <div class="thumb-gallery">
+            {% if base64img == None or base64img == Null or base64img == '' %}
+            <img class="first" src="/static/images/notfound.png" />
+            {% else %}
+            <img class="first" src="data:image/png;base64,{{ base64img }}" />      
+            {% endif %}
+        </div>
+        <div class="info">
+            <h3>{{ nameCompany }} {{ nameModelCar }} {{ releaseYearCar }}</h3>
+            <h4>{{ city }}</h4>
+            <div class="price">
+                <span>Цена</span>
+                <h4>{{ price }} <span>рублей</h4>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                        <th class="col" style="white-space: nowrap;"><span>Дата подачи</span></th>
+                        <th class="col" style="white-space: nowrap;"><span>Дата удаления</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <td>{{ startDateTime }}</td>
+                        <td>{{ endDateTime }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="ctas">
+                <div class="ctas">
+                    <ul class="horizontal">
+                        <li>
+                            <form action="/removead" method="get">
+                                <button class="btn btn-outline-danger" name="advertisment_id" value={{ advertisment_id }}>Удалить</button>
+                            </form>
+                        </li>
+                        <li>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editad-{{ idCar }}">Изменить</button>
+                        </li>
+                    </ul>
+                    <div style="clear:both;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro render_my_nonactive_ad_card(idCar, nameCompany, nameModelCar, releaseYearCar, mileage, horsepowers, bodyTypeCar, drivetrain, transmission, advertisment_id, startDateTime, endDateTime, city, idCity, price, description, base64img, cities, len) %}
+<div class="vehicle-card removed">
+    <div class="details">
+        <div class="thumb-gallery">
+            {% if base64img == None or base64img == Null or base64img == '' %}
+            <img class="first" src="/static/images/notfound.png" />
+            {% else %}
+            <img class="first" src="data:image/png;base64,{{ base64img }}" />      
+            {% endif %}
+        </div>
+        <div class="info">
+            <h3>{{ nameCompany }} {{ nameModelCar }} {{ releaseYearCar }}</h3>
+            <h4>{{ city }}</h4>
+            <div class="price">
+                <span>Цена</span>
+                <h4>{{ price }} <span>рублей</h4>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                        <th><span style="white-space: nowrap;">Дата подачи</span></th>
+                        <th><span style="white-space: nowrap;">Дата удаления</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <td>{{ startDateTime }}</td>
+                        <td>{{ endDateTime }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="ctas">
+                <div class="ctas">
+                    <ul class="horizontal">
+                        <li>
+                            <form action="/removead" method="get">
+                                <button class="btn btn-outline-danger" name="advertisment_id" value={{ advertisment_id }} disabled>Удалить</button>
+                            </form>
+                        </li>
+                        <li>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editad-{{ idCar }}" disabled>Изменить</button>
+                        </li>
+                    </ul>
+                    <div style="clear:both;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}

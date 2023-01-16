@@ -1,0 +1,263 @@
+DROP TABLE IF EXISTS bodytypecar;
+CREATE TABLE bodytypecar (
+  idBodyTypeCar INTEGER PRIMARY KEY AUTOINCREMENT,
+  nameBodyTypeCar VARCHAR(45) NOT NULL UNIQUE);
+
+INSERT INTO bodytypecar(nameBodyTypeCar) VALUES
+('Hatchback'),
+('Sedan'),
+('MUV/SUV'),
+('Coupe'),
+('Convertible'),
+('Wagon'),
+('Van'),
+('Jeep');
+
+DROP TABLE IF EXISTS company;
+CREATE TABLE company (
+  idCompany INTEGER PRIMARY KEY AUTOINCREMENT,
+  nameCompany VARCHAR(45) NOT NULL UNIQUE);
+
+INSERT INTO company(nameCompany) VALUES
+('AUDI'),
+('ASTON MARTIN'),
+('BENTLEY'),
+('BMW'),
+('CHEVROLET'),
+('FORD'),
+('HONDA'),
+('JEEP'),
+('KIA'),
+('LEXUS'),
+('MERCEDES'),
+('PORSCHE'),
+('TOYOTA'),
+('TESLA');
+
+DROP TABLE IF EXISTS modelcar;
+CREATE TABLE modelcar (
+  idModelCar INTEGER PRIMARY KEY AUTOINCREMENT,
+  company_idCompany INTEGER NOT NULL,
+  nameModelCar VARCHAR(45) NOT NULL,
+  UNIQUE (company_idCompany, idModelCar),
+  CONSTRAINT fk_company_idCompany
+    FOREIGN KEY (company_idCompany) 
+    REFERENCES company (idCompany) 
+    ON DELETE CASCADE);
+
+INSERT OR REPLACE INTO modelcar(company_idCompany, nameModelCar) VALUES
+(1, '80'), (1, 'TT'), (1, 'R8'), (1, 'Q3'), (1, 'Q5'), (1, 'Q7'), (1, 'Q8'), (1, 'A5'), (1, 'A6'), (1, 'A7'),
+(2, 'DBX'), (2, 'DB7'), (2, 'DBS'), (2, 'VIRAGE'), (2, 'V8'),
+(3, 'AZURE'), (3, 'CONTINENTAL GT'), (3, 'FLYING SPUR'), (3, 'MULSANNE'), (3, 'BENTAYGA'),
+(4, '1 SERIES'), (4, '2 SERIES'), (4, '3 SERIES'), (4, '4 SERIES'), (4, '5 SERIES'), (4, '6 SERIES'), (4, '7 SERIES'), (4, '8 SERIES'), (4, 'X2'), (4, 'X3'), (4, 'X4'), (4, 'X5'), (4, 'X6'), (4, 'X7'), (4, 'Z-4'), (4, 'Z-3'),
+(5, 'AVEO'), (5, 'VOLT'), (5, 'VIVA'), (5, 'MATIZ'), (5, 'CORVETTE'), (5, 'CORSA'), (5, 'CLASSIC'), (5, 'CAMARO'),
+(6, 'ESOSPORT'), (6, 'TAURUS'), (6, 'S-MAX'), (6, 'KUGA'), (6, 'SHELBY'), (6, 'PUMA'), (6, 'MUSTANG'), (6, 'GT'), (6, 'FOCUS'), (6, 'FIESTA'), (6, 'EDGE'),
+(7, 'JAZZ'), (7, 'S2000'), (7, 'PRELUDE'), (7, 'PASSPORT'), (7, 'HR-V'), (7, 'FIT'), (7, 'ELEMENT'), (7, 'CR-Z'), (7, 'CR-Z'),
+(8, 'CHEROKEE'), (8, 'COMMANDER'), (8, 'PARTIOT'), (8, 'WRANGLER'), 
+(9, 'CEED'), (9, 'CERATO'), (9, 'OPTIMA'), (9, 'SOUL'), (9, 'SPECTRA'), (9, 'SPORTAGE'), (9, 'STINGER'), (9, 'K900'), (9, 'VENGA'), (9, 'K5'), (9, 'OPIRUS'),
+(10, 'CT'), (10, 'ES'), (10, 'GS'), (10, 'GX'), (10, 'IS'), (10, 'LS'), (10, 'LX'), (10, 'RX'), (10, 'NX'), (10, 'SC'), (10, 'UX'),
+(11, 'A-CLASS'), (11, 'B-CLASS'), (11, 'C-CLASS'), (11, 'E-CLASS'), (11, 'S-CLASS'), (11, 'GLC'), (11, 'GLE'), (11, 'GLS'), (11, 'SLS'), (11, 'SLR'), (11, 'CLS'), (11, 'AMG GT'),
+(12, '911'), (12, 'BOXTER'), (12, 'CARRERA'), (12, 'CAYENNE'), (12, 'CAYMAN'), (12, 'PANAMERA'), (12, 'MACAN'), (12, 'TAYCAN'),
+(13, 'AURIS'), (13, 'MARK 2'), (13, 'GT'), (13, 'TUNDRA'), (13, 'TACOMA'), (13, 'SUPRA'), (13, 'RAV4'), (13, 'CAMRY'), (13, 'CELICA'), (13, 'COROLLA'), (13, 'CROWN'), (13, 'LAND CRUISER'), (13, 'PRADO'), (13, 'PRIUS'),
+(14, 'MODEL S'), (14, 'ROADSTER'), (14, 'MODEL X'), (14, 'MODEL 3'), (14, 'MODEL Y');
+
+DROP TABLE IF EXISTS city;
+CREATE TABLE city (
+  idCity INTEGER PRIMARY KEY AUTOINCREMENT,
+  nameCity VARCHAR(45) NOT NULL);
+
+INSERT OR REPLACE INTO city(nameCity) VALUES
+('Абаза'), ('Адыгейск'), ('Азов'), ('Амурск'), ('Владивосток'), ('Грозный'), ('Дзержинск'), 
+('Москва'), ('Санкт-Петербург'), ('Новосибирск'), ('Екатеринбург'), ('Казань'), ('Нижний Новгород'), 
+('Челябинск'), ('Красноярск'), ('Самара'), ('Уфа'), ('Омск'), ('Краснодар'), ('Воронеж'), ('Пермь'),
+('Омск'), ('Волгоград'), ('Саратов'), ('Тюмень'), ('Тольятти'), ('Уссурийск'), ('Находка'), ('Харабовск');
+
+DROP TABLE IF EXISTS drivetrain;
+CREATE TABLE drivetrain (
+  idDrivetrain INTEGER PRIMARY KEY,
+  nameDrivetrain VARCHAR(45) NOT NULL UNIQUE);
+
+INSERT INTO drivetrain(nameDrivetrain) VALUES
+('FWD'),
+('RWD'),
+('4WD'),
+('AWD');
+
+DROP TABLE IF EXISTS transmission;
+CREATE TABLE transmission (
+  idTransmission INTEGER PRIMARY KEY,
+  nameTransmission VARCHAR(45) NOT NULL UNIQUE);
+
+INSERT INTO transmission(nameTransmission) VALUES
+('Manual'),
+('Automatic'),
+('CVT');
+
+DROP TABLE IF EXISTS user;
+CREATE TABLE user (
+  idUser INTEGER PRIMARY KEY AUTOINCREMENT,
+  phoneUser VARCHAR(45) NOT NULL UNIQUE,
+  passwordUser VARCHAR(45) NOT NULL,
+  nameUser VARCHAR(45) NOT NULL,
+  surnameUser VARCHAR(45) NOT NULL);
+
+INSERT INTO user(phoneUser, passwordUser, nameUser, surnameUser) VALUES
+('+79502159105', '123123', 'Алексей', 'Волочанов'),
+('+75309182501', '123123', 'Сергей', 'Бирюзов'),
+('+79250102150', '123123', 'Владимир', 'Касперский'),
+('+72521257912', '123123', 'Алексей', 'Вологодин'),
+('+72158621552', '123123', 'Олег', 'Бауман'),
+('+72185712595', '123123', 'Екатерина', 'Волкова'),
+('+72571295721', '123123', 'Александр', 'Леонтьев'),
+('+79210751255', '123123', 'Валерия', 'Нагиева'),
+('+79385923000', '123123', 'Ольга', 'Егорова'),
+('+72196215125', '123123', 'Роман', 'Ломака'),
+('+72175921651', '123123', 'Руслан', 'Потапов');
+
+DROP TABLE IF EXISTS car;
+CREATE TABLE car (
+  idCar INTEGER PRIMARY KEY AUTOINCREMENT,
+  mileageCar FLOAT UNSIGNED NOT NULL,
+  releaseYearCar YEAR NOT NULL,
+  horsepowers INTEGER NOT NULL,
+  modelcar_idModelCar VARCHAR(45) NOT NULL,
+  bodyTypeCar_idBodyTypeCar INTEGER NOT NULL,
+  drivetrain_idDrivetrain INTEGER NOT NULL,
+  transmission_idTransmission INTEGER NOT NULL,
+  base64img VARCHAR NULL,
+  CONSTRAINT fk_car_bodyTypeCar
+    FOREIGN KEY (bodyTypeCar_idBodyTypeCar)
+    REFERENCES bodytypecar (idBodyTypeCar)
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_car_modelCar
+    FOREIGN KEY (modelcar_idModelCar)
+    REFERENCES modelcar (idModelCar)
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_car_drivetrain
+    FOREIGN KEY (drivetrain_idDrivetrain)
+    REFERENCES drivetrain (idDrivetrain)
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_car_transmission
+    FOREIGN KEY (transmission_idTransmission)
+    REFERENCES transmission (idTransmission)
+    ON UPDATE CASCADE);
+
+INSERT INTO car(mileageCar, releaseYearCar, horsepowers, modelcar_idModelCar, bodyTypeCar_idBodyTypeCar, drivetrain_idDrivetrain, transmission_idTransmission) VALUES
+(21559, 2017, 378, 129, 8, 4, 3),
+(218967, 2005, 80, 21, 4, 1, 2),
+(1208, 2020, 260, 68, 2, 2, 1),
+(79201, 2015, 124, 13, 8, 4, 1),
+(7821, 2018, 80, 53, 5, 3, 1),
+(2157, 2002, 499, 34, 4, 3, 1),
+(125791, 2010, 235, 78, 3, 3, 1),
+(25871, 2011, 43, 120, 2, 4, 1),
+(120, 2015, 345, 129, 2, 2, 1),
+(215970, 2017, 352, 88, 2, 4, 1),
+(12525, 2019, 80, 88, 1, 2, 2),
+(65878, 2021, 75, 90, 2, 1, 2),
+(98365, 2022, 125, 100, 1, 4, 2),
+(235, 2000, 378, 53, 6, 1, 2),
+(23598, 2012, 160, 12, 7, 4, 2),
+(93275, 2011, 200, 32, 7, 4, 2),
+(235968, 2009, 80, 23, 2, 3, 2),
+(23523, 2007, 90, 52, 2, 4, 2),
+(763, 2018, 600, 25, 2, 2, 2),
+(35890, 2016, 400, 64, 2, 1, 2),
+(23583, 2017, 450, 46, 3, 4, 2),
+(23597, 2017, 700, 75, 8, 4, 2),
+(22211, 2017, 250, 85, 8, 2, 2),
+(912750, 1999, 190, 57, 4, 4, 2),
+(1102, 2022, 900, 85, 8, 1, 3),
+(1259, 2022, 1100, 125, 8, 1, 3);
+
+DROP TABLE IF EXISTS userCar;
+CREATE TABLE userCar (
+  idUserCar INTEGER PRIMARY KEY AUTOINCREMENT,
+  car_idCar INTEGER NOT NULL,
+  user_idUser INTEGER NOT NULL,
+  CONSTRAINT fk_car_idCar
+    FOREIGN KEY (car_idCar)
+    REFERENCES car (idCar)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_user_idUser
+    FOREIGN KEY (user_idUser)
+    REFERENCES user (idUser)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+INSERT INTO userCar(car_idCar, user_idUser) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6),
+(7, 7),
+(8, 8),
+(9, 9),
+(10, 10),
+(11, 11),
+(12, 1),
+(13, 2),
+(14, 3),
+(15, 4),
+(16, 5),
+(17, 6),
+(18, 7),
+(19, 8),
+(20, 9),
+(21, 10),
+(22, 11),
+(23, 1),
+(24, 2),
+(25, 3),
+(26, 4);
+
+DROP TABLE IF EXISTS advertisment;
+CREATE TABLE advertisment (
+  advertisment_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  carPrice INTEGER NOT NULL,
+  description VARCHAR(45) NULL,
+  startDateTime DATETIME NOT NULL,
+  endDateTime DATETIME NULL,
+  city_idCity INTEGER NOT NULL,
+  userCar_idUserCar INTEGER NOT NULL,
+  CONSTRAINT fk_userCar_idUserCar
+    FOREIGN KEY (userCar_idUserCar)
+    REFERENCES userCar (idUserCar)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_city
+    FOREIGN KEY (city_idCity)
+    REFERENCES city (idCity)
+    ON UPDATE CASCADE);
+
+INSERT INTO advertisment(userCar_idUserCar, carPrice, city_idCity, startDateTime) VALUES
+(1, 4750000, 1, '2022-10-05 19:30:10'),
+(2, 259000, 1, '2022-10-07 19:30:10'),
+(3, 3500000, 3, '2022-10-06 19:30:10'),
+(4, 750500, 6, '2022-10-09 19:30:10'),
+(5, 250000, 5, '2022-10-10 19:30:10'),
+(6, 780000, 6, '2022-10-11 19:30:10'),
+(7, 126000, 12, '2022-10-10 19:30:10'),
+(8, 1645000, 8, '2022-10-11 19:30:10'),
+(9, 475500, 11, '2022-10-04 19:30:10'),
+(10, 900000, 26, '2022-10-05 19:30:10'),
+(11, 80000, 28, '2022-10-06 19:30:10'),
+(12, 420000, 12, '2022-10-08 19:30:10'),
+(13, 130000, 1, '2022-09-29 19:30:10'),
+(14, 56000, 16, '2022-09-07 19:30:10'),
+(15, 75000, 5, '2022-09-01 19:30:10'),
+(16, 650000, 5, '2022-09-25 19:30:10'),
+(17, 42000, 17, '2022-09-04 19:30:10'),
+(18, 35000, 8, '2022-09-10 19:30:10'),
+(19, 3650000, 9, '2022-09-13 19:30:10'),
+(20, 2476000, 19, '2022-08-16 19:30:10'),
+(21, 3400000, 19, '2022-08-01 19:30:10'),
+(22, 4400000, 14, '2022-08-01 19:30:10'),
+(23, 2500000, 27, '2022-08-17 19:30:10'),
+(24, 100000, 29, '2022-08-19 19:30:10'),
+(25, 12000000, 1, '2022-08-24 19:30:10'),
+(26, 16500000, 2, '2022-08-20 19:30:10');

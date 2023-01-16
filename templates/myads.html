@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% import 'macros.html' as macros %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="/static/CSS/myads.css"/>
+{% endblock %}
+
+{% block body %}
+<div class="mainblock">
+    <div class="row justify-content-start">
+        <div class="col-3">
+            <h3>Мои объявления</h3>
+        </div>
+        <div class="col-3">
+            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#newad">Добавить объявление</button>
+        </div>
+    </div>
+    <div class="modal fade" id="newad" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="get" action="/newad">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Новое объявление</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group mb-2">
+                            <label for="car">Автомобиль</label>
+                            <select class="form-select" id="car" name="car_to_ad" required {% if len(avble_cars) == 0 %} disabled {% endif %}>
+                                {% if len(avble_cars) == 0 %}
+                                    <option>Автомобили без объявлений отсутствуют</option>
+                                {% else %}
+                                    {% set n = len(avble_cars) %}
+                                    {% for i in range(1, n + 1) %}
+                                        <option value={{ avble_cars.iloc[i - 1].idCar }}>{{ avble_cars.iloc[i - 1].nameCompany }} {{ avble_cars.iloc[i - 1].nameModelCar }} {{ avble_cars.iloc[i - 1].releaseYearCar }}</option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="city">Город</label>
+                            <select id="city" class="form-select" name="city_to_ad" required>
+                                {% set n = len(cities) %}
+                                {% for i in range(1, n + 1) %}
+                                    <option value={{ i }}>{{ cities.iloc[i - 1].nameCity }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="price">Цена</label>
+                            <input id="price" type="number" step="any" class="form-control" placeholder="Введите цену продажи автомобиля в рублях" name="price_to_ad" required>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="description">Описание</label>
+                            <textarea class="form-control" id="description" rows="3" maxlength="500" name="desc_to_ad"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        <button type="button" class="btn btn-primary" {% if len(avble_cars) == 0 %} disabled {% endif %} onClick="if(form.checkValidity()){form.requestSubmit(); disabled=true;}else{form.checkValidity();}">
+                            Добавить объявление
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="wrapper">
+            {% set n = len(ads) %}
+            {% for i in range(n) %}
+                {{ macros.render_my_ad_card(
+                    ads.idCar.iloc[i],
+                    ads.nameCompany.iloc[i],
+                    ads.nameModelCar.iloc[i],
+                    ads.releaseYearCar.iloc[i],
+                    ads.mileageCar.iloc[i],
+                    ads.horsepowers.iloc[i],
+                    ads.nameBodyTypeCar.iloc[i],
+                    ads.nameDrivetrain.iloc[i],
+                    ads.nameTransmission.iloc[i],
+                    ads.advertisment_id.iloc[i],
+                    ads.startDateTime.iloc[i],
+                    ads.endDateTime.iloc[i],
+                    ads.nameCity.iloc[i],
+                    ads.idCity.iloc[i],
+                    ads.carPrice.iloc[i],
+                    ads.description.iloc[i],
+                    ads.base64img.iloc[i],
+                    cities,
+                    len) }}
+            {% endfor %}
+
+            {% set n = len(nonactive_ads) %}
+            {% for i in range(n) %}
+                {{ macros.render_my_nonactive_ad_card(
+                    nonactive_ads.idCar.iloc[i],
+                    nonactive_ads.nameCompany.iloc[i],
+                    nonactive_ads.nameModelCar.iloc[i],
+                    nonactive_ads.releaseYearCar.iloc[i],
+                    nonactive_ads.mileageCar.iloc[i],
+                    nonactive_ads.horsepowers.iloc[i],
+                    nonactive_ads.nameBodyTypeCar.iloc[i],
+                    nonactive_ads.nameDrivetrain.iloc[i],
+                    nonactive_ads.nameTransmission.iloc[i],
+                    nonactive_ads.advertisment_id.iloc[i],
+                    nonactive_ads.startDateTime.iloc[i],
+                    nonactive_ads.endDateTime.iloc[i],
+                    nonactive_ads.nameCity.iloc[i],
+                    nonactive_ads.idCity.iloc[i],
+                    nonactive_ads.carPrice.iloc[i],
+                    nonactive_ads.description.iloc[i],
+                    nonactive_ads.base64img.iloc[i],
+                    cities,
+                    len) }}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

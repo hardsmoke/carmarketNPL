@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:700');
+.mainblock{
+    margin-top: 100px;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-bottom: 50px;
+    height: 100%;
+}
+
+ul{
+  margin: 0;
+  padding: 0;
+}
+
+ul li{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sortform{
+  margin-top: 0;
+  margin-bottom: auto;
+  margin-left: 55%;
+
+  width: 15%;
+  height: 50px;
+}
+
+.wrapper{
+    padding-top: 25px;
+    width: 100%;
+    height: 100%;
+}
+
+.vehicle-card{
+    position: relative;
+    display: inline-block;
+    width: 240px;  
+    height: 500px;
+    overflow: visible;
+    z-index: 1;
+    border-radius: 2px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.vehicle-card .details{
+    position: absolute;
+    height: 500px;
+    width: 240px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
+}
+
+.vehicle-card .info{
+  margin: 10px;
+}
+
+.vehicle-card .ctas{
+  margin: 10px 0;
+}
+
+.thumb-gallery{
+  text-align: center;
+  height: 150px;
+}
+
+.thumb-gallery .first{
+  max-height: 100%; 
+  max-width: 100%;
+}
+
+.vehicle-card h3{
+  margin: 0;
+  font-family: "Roboto Condensed", Helvetica, Arial, sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: -.5px;
+}
+
+.vehicle-card h4{
+  margin: 0;
+  font-family: "Helvetica", Arial, sans-serif;
+  font-size: 1rem;
+  letter-spacing: -.5px;
+}
+
+.vehicle-card .price span{
+  font-family: "Helvetica", Arial, sans-serif;
+  color: #999;
+  font-size: .75rem;
+}
+.vehicle-card .price h4{
+  margin: 0;
+  font-family: "Roboto Condensed", Helvetica, Arial, sans-serif;
+  color: #222;
+  font-size: 1.25rem;
+}
+
+.vehicle-card .desc p{
+  color: #666;
+  font-size: 1rem;
+  line-height: 1.25rem;
+}
+
+.vehicle-card .specs{
+  border-top: 1px solid #dadada;
+  border-bottom: 1px solid #dadada;
+  margin: 20px 0;
+  padding: 10px 0;  
+}
+
+.specs .spec{
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.specs span{
+  font-family: "Helvetica", Arial, sans-serif;
+  color: #999;
+  font-size: .75rem;
+}
+
+.specs p{
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.specs p span{
+  font-size: .75rem;
+  margin-left: 2px;
+  font-weight: normal;
+}
+
+.vcbtn{
+  display: block;
+  padding: 0 10px;
+  margin-bottom: 5px;
+  float: left;
+  font-size: .75rem;
+  font-family: "Helvetica", Arial, sans-serif;
+  text-decoration: none;
+  height: 30px;
+  width: 100%;
+  text-align: center;
+  border-radius: 2px;
+  font-weight: bold;  
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.vcprimary{
+  background-color: #1383b3;
+  color: #fff;
+  line-height: 30px;
+}
+
+.vcsecondary{
+  background-color: #fff;
+  color: #1383b3;
+  border: 2px solid #1383b3;  
+  line-height: 26px;
+}

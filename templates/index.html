@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% import 'macros.html' as macros %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="/static/CSS/vehiclecard.css"/>
+<link rel="stylesheet" type="text/css" href="/static/CSS/search_form.css"/>
+<script src="/static/JS/index.js"></script>
+{% endblock %}
+
+{% block title %}
+<title>INDEX</title>
+{% endblock %}
+
+{% block body %}
+<div class="search_form">
+    <form method="get" action="/">
+        <div class="inner-form">
+            <div class="advance-search">
+            <span class="desc">Расширенный поиск</span>
+                <div class="row">
+                    <div class="input-field">
+                        <div class="input-select">
+                            <select id="company-select" class="form-select" name="company" onchange="update_models(this, 'model_to_filter', 0, `<option value=0>Любая модель</option>`, 1, -1);">
+                                <option value=0>Любая марка</option>
+                                {% set n = len(companies) %}
+                                {% for i in range(1, n + 1) %}
+                                    <option value={{ i }} {% if i == selected_company_id %} selected {% endif %}>{{ companies.iloc[i - 1].nameCompany }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-field">
+                        <div class="input-select">
+                            {% if selected_company_id == 0 %}
+                            <select class="form-select" name="model_to_filter" id="model_to_filter" disabled>
+                                <option value=0 selected>Выберите марку</option>
+                            </select>
+                            {% else %}
+                            <select class="form-select" name="model_to_filter" id="model_to_filter">
+                                <option value=0>Любая модель</option>
+                                {% set n = len(models) %}
+                                {% for i in range(1, n + 1) %}
+                                    <option value={{ i }} {% if i == selected_model_id %} selected {% endif %}>{{ models.iloc[i - 1].nameModelCar }}</option>
+                                {% endfor %}
+                            </select>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="input-field">
+                        <div class="input-select">
+                            <select class="form-select" name="transmission">
+                                <option value=0>Любая коробка передач</option>
+                                {% set n = len(transmissions) %}
+                                {% for i in range(1, n + 1) %}
+                                    <option value={{ i }} {% if i == selected_transmission_id %} selected {% endif %}>{{ transmissions.iloc[i - 1].nameTransmission }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field">
+                        <div class="input-select">
+                            <select class="form-select" name="bodytype">
+                                <option value=0>Любой тип кузова</option>
+                                {% set n = len(bodytypes) %}
+                                {% for i in range(1, n + 1) %}
+                                    <option value={{ i }} {% if i == selected_bodytype_id %} selected {% endif %}>{{ bodytypes.iloc[i - 1].nameBodyTypeCar }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-field">
+                        <div class="input-select">
+                            <select class="form-select" name="drivetrain">
+                                <option value=0>Любой привод</option>
+                                {% set n = len(drivetrains) %}
+                                {% for i in range(1, n + 1) %}
+                                    <option value={{ i }} {% if i == selected_drivetrain_id %} selected {% endif %}>{{ drivetrains.iloc[i - 1].nameDrivetrain }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-field">
+                        <div class="input-select">
+                            <select class="form-select" name="city">
+                                <option value=0>Любой город</option>
+                                {% set n = len(cities) %}
+                                {% for i in range(1, n + 1) %}
+                                    <option value={{ i }} {% if i == selected_city_id %} selected {% endif %}>{{ cities.iloc[i - 1].nameCity }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row second">
+                    <div class="input-field">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Цена</span>
+                            </div>
+                            <input type="text" {% if price_from != -1 %} value={{ price_from }} {% endif %} class="form-control" placeholder="От" name="price_from">
+                            <input type="text" {% if price_to != -1 %} value={{ price_to }} {% endif %} class="form-control" placeholder="До" name="price_to">
+                        </div>
+                    </div>
+                    <div class="input-field">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Год</span>
+                            </div>
+                            <input type="text" {% if releaseYear_from != -1 %} value={{ releaseYear_from }} {% endif %} class="form-control" placeholder="От" name="releaseYear_from">
+                            <input type="text" {% if releaseYear_to != -1 %} value={{ releaseYear_to }} {% endif %} class="form-control" placeholder="До" name="releaseYear_to">
+                        </div>
+                    </div>
+                    <div class="input-field">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Пробег</span>
+                            </div>
+                            <input type="text" {% if mileage_to != -1 %} value={{ mileage_to }} {% endif %} class="form-control" placeholder="До" name="mileage_to">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row last">
+                    <div class="input-field">
+                        <div class="result-count">
+                            <span>{{ len(ads) }}</span>найдено
+                        </div>
+                        <div class="group-btn">
+                            <button class="btn btn-outline-primary me-2" name="clear">Сбросить</button>
+                            <button class="btn btn-primary">Применить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<form method="get" action={{ full_path }}>
+    <div class="sortform">
+        <select class="form-select" name="sort" onchange="this.form.submit();">
+            <option value="1" {% if selected_sort == 1 %} selected {% endif %}>Новые объявления</option>
+            <option value="2" {% if selected_sort == 2 %} selected {% endif %}>Старые объявления</option>
+            <option value="3" {% if selected_sort == 3 %} selected {% endif %}>С низкой ценой</option>
+            <option value="4" {% if selected_sort == 4 %} selected {% endif %}>С высокой ценой</option>
+            <option value="5" {% if selected_sort == 5 %} selected {% endif %}>С маленьким пробегом</option>
+        </select>
+    </div>
+</form>
+
+<div class="wrapper">
+    {% set n = len(ads) %}
+    {% for i in range(n) %}
+        {{ macros.render_advertisment_card(
+            ads.advertisment_id.iloc[i],
+            ads.nameCompany.iloc[i], 
+            ads.nameModelCar.iloc[i], 
+            ads.nameBodyTypeCar.iloc[i],
+            ads.nameDrivetrain.iloc[i],
+            ads.nameTransmission.iloc[i],
+            ads.description.iloc[i],
+            ads.mileageCar.iloc[i], 
+            ads.releaseYearCar.iloc[i], 
+            ads.carPrice.iloc[i], 
+            ads.horsepowers.iloc[i],
+            ads.nameCity.iloc[i],
+            ads.base64img.iloc[i],
+            ads.user_idUser.iloc[i],
+            ads.nameUser.iloc[i],
+            ads.surnameUser.iloc[i],
+            ads.phoneUser.iloc[i]) }}
+    {% endfor %}
+</div>
+{% endblock %}

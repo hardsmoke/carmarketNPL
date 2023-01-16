@@ -1,0 +1,47 @@
+{% extends 'sign-base.html' %}
+
+{% block title %}
+<title>Регистрация</title>
+{% endblock %}
+
+{% block form %}
+<form action="/sign-up" method="get">
+    <img class="mb-4" src="/static/images/bootstrap-logo.svg" alt="" width="72" height="57">
+    <h1 class="h3 mb-3 fw-normal">Регистрация</h1>
+
+    <div class="form-floating mb-2">
+        <input type="tel" class="form-control" id="floatingInput" placeholder="Номер телефона" pattern="\+[0-9]{11}" name="phoneNumber" required>
+      <label {% if invalid_phoneNumber %} class="text-danger" {% endif %} for="floatingInput">Номер телефона</label>
+    </div>
+    
+    <div class="form-floating">
+      <input type="password" class="form-control" id="floatingPassword" placeholder="Пароль" name="password" minlength="8" required>
+      <label for="floatingPassword">Пароль</label>
+    </div>
+
+    <div class="form-floating mb-2">
+        <input type="text" class="form-control" id="floatingInput" placeholder="Имя" name="name" required value={{ entered_name }}>
+        <label for="floatingInput">Имя</label>
+    </div>
+
+    <div class="form-floating mb-2">
+        <input type="text" class="form-control" id="floatingInput" placeholder="Фамилия" name="surname" required value={{ entered_surname }}>
+        <label for="floatingInput">Фамилия</label>
+    </div>
+    
+    {% if invalid_phoneNumber %}
+    <div>
+      <p class="text-danger">
+        Аккаунт уже существует
+      </p>      
+    </div>
+    {% endif %}
+
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Создать аккаунт</button>
+    
+    <ul class="horizontal">
+        <li><a class="nav-link active link-dark" aria-current="page" href="/">На главную</a></li>
+        <li><a class="nav-link active link-dark" aria-current="page" href="sign-in">У меня есть аккаунт</a></li>
+    </ul>
+</form>  
+{% endblock %}

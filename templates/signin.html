@@ -1,0 +1,38 @@
+{% extends 'sign-base.html' %}
+
+{% block title %}
+<title>Авторизация</title>
+{% endblock %}
+
+{% block form %}
+<form>
+  <img class="mb-4" src="/static/images/bootstrap-logo.svg" alt="" width="72" height="57">
+
+  <h1 class="h3 mb-3 fw-normal">Авторизация</h1>
+
+  <div class="form-floating mb-2">
+    <input type="tel" class="form-control" id="floatingInput" placeholder="Номер телефона" pattern="\+[0-9]{11}" name="phoneNumber" required>
+    <label {% if invalid_data %} class="text-danger" {% endif %} for="floatingInput">Номер телефона</label>
+  </div>
+
+  <div class="form-floating mb-2">
+    <input type="password" class="form-control" id="floatingPassword" placeholder="Пароль" name="password" required>
+    <label {% if invalid_data %} class="text-danger" {% endif %} for="floatingPassword">Пароль</label>
+  </div>
+
+  {% if invalid_data %}
+  <div>
+    <p class="text-danger">
+      Данные введены неверно
+    </p>      
+  </div>
+  {% endif %}
+
+  <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
+
+  <ul class="horizontal">
+    <li><a class="nav-link active link-dark" aria-current="page" href="/">На главную</a></li>
+    <li><a class="nav-link active link-dark" aria-current="page" href="sign-up">У меня нет аккаунта</a></li>
+  </ul>
+</form>
+{% endblock %}

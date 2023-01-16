@@ -1,0 +1,10 @@
+ul.horizontal {
+    margin: 0 auto;
+    padding: 4px;
+}
+
+ul.horizontal li {
+    display: inline-block;
+    margin-right: 5px;
+    padding: 3px;
+}

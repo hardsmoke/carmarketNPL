@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% import 'macros.html' as macros %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="/static/CSS/mycars.css"/>
+<script src="/static/JS/index.js"></script>
+{% endblock %}
+
+{% block body %}
+<div class="mainblock">
+    <div class="row justify-content-start">
+        <div class="col-3">
+            <h3>Мои автомобили</h3>
+        </div>
+        <div class="col-3">
+            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#newcar">Добавить автомобиль</button>
+        </div>
+    </div>
+    <div class="modal fade" id="newcar" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post" action="/newcar" enctype="multipart/form-data">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Добавить автомобиль</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group mb-2">
+                            <label for="company">Марка</label>
+                            <select id="company" class="form-select" name="company_to_add" onchange="update_models(this, `model`);" required>
+                                {% set n = len(companies) %}
+                                {% for i in range(1, n + 1) %}
+                                    <option value={{ i - 1 }}>{{ companies.iloc[i - 1].nameCompany }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="model">Модель</label>
+                            <select id="model" class="form-select" name="model_to_add" required>
+                                {% set n = len(models) %}
+                                {% for i in range(1, n + 1) %}
+                                    <option value={{ i - 1 }}>{{ models.iloc[i - 1].nameModelCar }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="transmission">Коробка передач</label>
+                            <select id="transmission" class="form-select" name="transmission_to_add" required>
+                                {% set n = len(transmissions) %}
+                                {% for i in range(1, n + 1) %}
+                                    <option value={{ i }}>{{ transmissions.iloc[i - 1].nameTransmission }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="drivetrain">Привод</label>
+                            <select id="drivetrain" class="form-select" name="drivetrain_to_add" required>
+                                {% set n = len(drivetrains) %}
+                                {% for i in range(1, n + 1) %}
+                                    <option value={{ i }}>{{ drivetrains.iloc[i - 1].nameDrivetrain }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="bodytypecar">Кузов</label>
+                            <select id="bodytypecar" class="form-select" name="bodytypecar_to_add" required>
+                                {% set n = len(bodytypes) %}
+                                {% for i in range(1, n + 1) %}
+                                    <option value={{ i }}>{{ bodytypes.iloc[i - 1].nameBodyTypeCar }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="releaseYear">Год выпуска</label>
+                            <input id="releaseYear" type="number" length="4" step="any" class="form-control" name="releaseYear_to_add" required>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="horsepowers">Мощность двигателя</label>
+                            <input id="horsepowers" type="number" step="any" class="form-control" placeholder="Введите количество лошадинных сил" name="horsepowers_to_add" required>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label for="mileage">Пробег</label>
+                            <input id="mileage" type="number" step="any" class="form-control" placeholder="Введите пробег(км)" name="mileage_to_add" required>
+                        </div>
+
+                        <div class="mb-2">
+                            <label for="file" class="form-label">Изображение</label>
+                            <input class="form-control" type="file" id="file" name="file" accept="image/*">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        <button type="button" class="btn btn-primary" onClick="if(form.checkValidity()){form.requestSubmit(); disabled=true;}else{form.checkValidity();}">
+                            Добавить автомобиль
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="wrapper">
+            {% set n = len(cars) %}
+            {% for i in range(n) %}
+                {{ macros.render_car_card(
+                    companies,
+                    models,
+                    transmissions,
+                    drivetrains,
+                    bodytypes,
+                    cars.idCar.iloc[i],
+                    cars.idCompany.iloc[i],
+                    cars.idModelCar.iloc[i],
+                    cars.nameCompany.iloc[i], 
+                    cars.nameModelCar.iloc[i], 
+                    cars.releaseYearCar.iloc[i],
+                    cars.mileageCar.iloc[i],
+                    cars.horsepowers.iloc[i],
+                    cars.bodyTypeCar_idBodyTypeCar.iloc[i],
+                    cars.nameBodyTypeCar.iloc[i],
+                    cars.drivetrain_idDrivetrain.iloc[i],
+                    cars.nameDrivetrain.iloc[i],
+                    cars.transmission_idTransmission.iloc[i],
+                    cars.nameTransmission.iloc[i],
+                    cars.base64img.iloc[i],
+                    len) }}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
